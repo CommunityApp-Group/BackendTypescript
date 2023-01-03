@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OtpModel = exports.LikeModel = exports.CommentModel = exports.PostModel = exports.UserModel = void 0;
+const User_1 = require("./User");
+Object.defineProperty(exports, "UserModel", { enumerable: true, get: function () { return User_1.UserModel; } });
+// import { TransactionModel } from "./Transaction";
+// import { BillModel } from "./Bill";
+// import { MessageModel } from "./Message";
+const Otp_1 = require("./Otp");
+Object.defineProperty(exports, "OtpModel", { enumerable: true, get: function () { return Otp_1.OtpModel; } });
+const Post_1 = require("./Post");
+Object.defineProperty(exports, "PostModel", { enumerable: true, get: function () { return Post_1.PostModel; } });
+const Comment_1 = require("./Comment");
+Object.defineProperty(exports, "CommentModel", { enumerable: true, get: function () { return Comment_1.CommentModel; } });
+const Like_1 = require("./Like");
+Object.defineProperty(exports, "LikeModel", { enumerable: true, get: function () { return Like_1.LikeModel; } });
