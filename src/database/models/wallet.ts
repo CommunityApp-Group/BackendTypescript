@@ -1,7 +1,10 @@
 import mongoose, { Schema, model, Document } from "mongoose";
+import { UserModel } from "./User";
+
 
 interface Wallet extends Document {
     Balance: Number
+    User: String
 }
 
 type WalletInput = {
@@ -13,7 +16,11 @@ const WalletSchema = new Schema<Wallet> (
         Balance: {
             type: Schema.Types.String,
             select: true,
-          },
+        },
+        User: {
+            type: Schema.Types.ObjectId,
+            ref: UserModel
+        }
     },
         {
         timestamps: true,
