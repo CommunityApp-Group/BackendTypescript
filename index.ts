@@ -2,10 +2,18 @@ import express, {Express, Request, Response } from "express";
 import logger from "./src/utils/logger";
 import dotenv from "dotenv";
 import connectDB from "./src/database";
+import { AppDataSource } from "./app-data-source";
 
 dotenv.config();
 
-
+AppDataSource
+    .initialize()
+    .then(() => {
+        console.log("Data Source has been initialized!")
+    })
+    .catch((err) => {
+        console.error("Error during Data Source initialization:", err)
+    })
 const app: Express = express()
 
 const PORT = process.env.PORT || Number(8000)

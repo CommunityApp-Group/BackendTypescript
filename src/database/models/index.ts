@@ -6,14 +6,14 @@ import { OtpModel } from "./Otp";
 import { PostModel } from "./Post";
 import { CommentModel } from "./Comment";
 import { LikeModel } from "./Like";
-import { WalletModel} from "./wallet";
+// import { WalletModel} from "./wallet";
 
 export {
   UserModel,
   PostModel,
   CommentModel,
   LikeModel,
-  WalletModel,
+  // WalletModel,
   // Device,
   // MessageModel,
   // TransactionModel,
