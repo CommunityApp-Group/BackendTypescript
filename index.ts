@@ -1,8 +1,10 @@
 import express, {Express, Request, Response } from "express";
+import "reflect-metadata";
 import logger from "./src/utils/logger";
 import dotenv from "dotenv";
 import connectDB from "./src/database";
 import { AppDataSource } from "./app-data-source";
+import appRoutes from "./src/routes";
 
 dotenv.config();
 
@@ -15,6 +17,8 @@ AppDataSource
         console.error("Error during Data Source initialization:", err)
     })
 const app: Express = express()
+
+app.use("/api/v1", appRoutes);
 
 const PORT = process.env.PORT || Number(8000)
 console.log(PORT)
@@ -29,7 +33,7 @@ async function onListening() {
 // app.listen(PORT, onListening)
 
 app.listen(PORT, () => {
-  connectDB(),
+  // connectDB(),
   logger(module).error(`⚡️[server]: Server is running at port ${PORT}`);
     console.log(`server is running on ${PORT}`)
 })

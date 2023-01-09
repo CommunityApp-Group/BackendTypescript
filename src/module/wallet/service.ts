@@ -1,23 +1,31 @@
-import moment from "moment";
-import { OTPSTATUS } from "../../constants";
-import { WalletModel } from "../../database/models";
-import { Wallet } from "../../database/models/wallet";
-import { User } from "../../database/models/User";
-// import SingletonEmitter from "../../eventStore";
 
+import { Wallet } from '../../Entity/wallet.entity';
+import { User } from "../../Entity/user.entity";
+import {DataSource } from 'typeorm';
+import { AppDataSource } from '../../../app-data-source';
+import { UUIDV4 } from 'sequelize';
+
+const WalletModel = AppDataSource.getRepository(Wallet);
 interface WalletQuery{
-    Balance: string
+    Balance: number
 }
 
 class WalletService {
-    static async getWalletBalance(user: User ){
+    static async createWallet(){
+        const wallet = await WalletModel.create()
+        return wallet;
+    }
+    static async getWalletBalance(id: string ){
         const Balance = await WalletModel.findOne({
-            where: {User: user}
+            where: {id}
         });
         return Balance;
-    }
-    static async createBalance(payload: WalletQuery){
-        const Balance= await WalletModel.create(payload);
+    }; 
+    
+    static async updateBalance(balance: WalletQuery, user: User){
+        const Balance = WalletModel.create(balance)
         return Balance;
     }
 }
+
+export default WalletService;
