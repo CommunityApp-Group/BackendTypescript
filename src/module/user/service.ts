@@ -1,10 +1,9 @@
-import moment from "moment";
-import { OTPSTATUS } from "../../constants";
-// import EVENTS from "../../constants/events";
-import { OtpModel, UserModel } from "../../database/models";
-import { User } from "../../database/models/User";
-// import SingletonEmitter from "../../eventStore";
 
+import { AppDataSource } from "../../../app-data-source";
+
+import { User } from "../../Entity/user.entity";
+
+const UserModel = AppDataSource.getRepository(User);
 interface UserQuery {
     status?: string;
     firstName?: string;
@@ -30,14 +29,14 @@ class UserService {
         return user;
     }
     static async findUserById(userId: any) {
-        const user = await UserModel.findById(userId);
+        const user = await UserModel.findOne(userId);
         return user;
       }
     
-    static async findUsers(query: Object): Promise<(User & { _id: any })[]> {
-        const users = await UserModel.find(query);
-        return users;
-    }
+    // static async findUsers(query: Object): Promise<(User & { _id: any })[]> {
+    //     const users = await UserModel.find(query);
+    //     return users;
+    // }
     static async updateUser(user: any, payload: UserQuery) {
         for (const key in payload) {
           if (Object.prototype.hasOwnProperty.call(payload, key)) {
@@ -49,17 +48,17 @@ class UserService {
         return user;
       }
 
-    static async deleteAccount(userId: any){
-        const user = await UserModel.updateOne(
-          { isDeleted: true },
-          {
-            where: {
-              id: userId,
-            },
-          }
-        );
-        return user;
-    }
+    // static async deleteAccount(userId: any){
+    //     const user = await UserModel.updateOne(
+    //       { isDeleted: true },
+    //       {
+    //         where: {
+    //           id: userId,
+    //         },
+    //       }
+    //     );
+    //     return user;
+    // }
 }
 
 export default UserService;
