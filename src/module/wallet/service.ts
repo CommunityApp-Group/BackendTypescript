@@ -13,8 +13,6 @@ interface WalletQuery{
 
 class WalletService {
     static async createWallet(payload: any){
-        // const wallet =  WalletModel.create(payload)
-        // return wallet;
         const wallet =   await AppDataSource
             .createQueryBuilder()
             .insert()

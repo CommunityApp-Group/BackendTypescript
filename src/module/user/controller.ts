@@ -122,7 +122,7 @@ class UserController {
                     );
             }
 
-            const isPinCorrect = bcrypt.compareSync(password, user.password);
+            const isPinCorrect = argon.verify(user.password, password);
             if (!isPinCorrect)
                 return handleResponse(
                 req,
@@ -137,6 +137,8 @@ class UserController {
             user.accessToken = accessToken;
             await user.save()
             // user = await UserService.updateUser(user, { accessToken });
+
+            return res.json(accessToken);
 
             return handleResponse(
                 req,
