@@ -5,3 +5,4 @@ logs
 coverage
 yarn.lock
 package-lock.json
+ormconfig.json

@@ -3,11 +3,13 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import _ from "lodash";
-import { UserModel } from "../database/models";
+import { User } from "../Entity/user.entity";
 import handleResponse from "./response";
 import logger from "../utils/logger";
 import { MESSAGES } from "../constants";
 import { IGetUserAuthInfoRequest } from "../../types/express";
+import { AppDataSource } from "../../app-data-source";
+const UserModel = AppDataSource.getRepository(User);
 
 dotenv.config();
 let { JWT_SECRET_KEY } = process.env;
@@ -51,7 +53,7 @@ const verifyUser = async (
     if (!JWT_SECRET_KEY) JWT_SECRET_KEY = "secret";
     const decoded = jwt.verify(token, <any>JWT_SECRET_KEY) as decodepLoad;
 
-    const user = await UserModel.findById(decoded.id);
+    const user = await UserModel.findOneBy(decoded.id);
 
     if (!user || (user && user.accessToken !== token)) {
       return handleResponse(
