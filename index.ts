@@ -18,6 +18,10 @@ AppDataSource
     })
 const app: Express = express()
 
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/api/v1", appRoutes);
 
 const PORT = process.env.PORT || Number(8000)

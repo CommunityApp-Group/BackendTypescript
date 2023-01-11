@@ -25,17 +25,19 @@ class WalletController {
             }
             const balance = await WalletService.getWalletBalance(user.id);
             if (!balance) {
+                const newWallet = await WalletService.createWallet(user.id)
                 return handleResponse(
                 req,
                 res,
                 {
                     status: "error",
                     message:
-                    "Balance's details cannot be fetched. Please contact customer care for resolution",
+                    "Balance's details cannot be fetched. A new account will now be created for you",
                 },
                 400
                 );
             }
+            return res.json(balance);
 
             return handleResponse(
                 req,
@@ -47,6 +49,8 @@ class WalletController {
                 },
                 200
               );
+
+             
             
         } catch (error: any) {
             logger(module).info(
@@ -86,7 +90,7 @@ class WalletController {
             }
             let wallet = await WalletService.getWalletBalance(walletId)
             if (!wallet) {
-                const createWallet = await WalletService.createWallet();
+                const createWallet = await WalletService.createWallet(user.id);
                 return handleResponse(
                 req,
                 res,
@@ -98,7 +102,7 @@ class WalletController {
                 400
                 );
             }
-            if(wallet.id !== user.id){
+            if(wallet.userId !== user.id){
                 return handleResponse(
                     req,
                     res,
@@ -113,6 +117,8 @@ class WalletController {
             
             wallet.Balance += amount;
             await wallet.save();
+
+            return res.json(wallet);
 
             return handleResponse(
                 req,

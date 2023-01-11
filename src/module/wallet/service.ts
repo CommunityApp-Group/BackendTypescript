@@ -7,18 +7,29 @@ import { UUIDV4 } from 'sequelize';
 
 const WalletModel = AppDataSource.getRepository(Wallet);
 interface WalletQuery{
-    Balance: number
+    Balance?: number
+    userId: string
 }
 
 class WalletService {
-    static async createWallet(){
-        const wallet = await WalletModel.create()
+    static async createWallet(payload: any){
+        // const wallet =  WalletModel.create(payload)
+        // return wallet;
+        const wallet =   await AppDataSource
+            .createQueryBuilder()
+            .insert()
+            .into(Wallet)
+            .values([
+                { userId: payload },
+            ])
+            .execute()
+
         return wallet;
+    
+
     }
     static async getWalletBalance(id: string ){
-        const Balance = await WalletModel.findOne({
-            where: {id}
-        });
+        const Balance = await WalletModel.findOneBy({userId: id});
         return Balance;
     }; 
     

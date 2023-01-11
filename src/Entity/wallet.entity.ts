@@ -5,12 +5,11 @@ import { User } from "./user.entity";
 @Entity()
 export class Wallet extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
-    id!: string;
+    id: string;
 
     @Column({default: 0})
-    Balance!: number
+    Balance: number
 
-    @OneToOne((_type) => User, (user) => user.id, { eager: true })
-    @Exclude({ toPlainOnly: true })
-    user!: User;
+    @Column()
+    userId: string;
 }
