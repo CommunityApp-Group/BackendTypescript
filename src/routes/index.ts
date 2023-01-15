@@ -1,6 +1,6 @@
 import express from "express";
 import handleRequest from "../middlewares/request";
-import validateUserDevice from "../middlewares/validateUserDevice";
+// import validateUserDevice from "../middlewares/validateUserDevice";
 import verifyUser from "../middlewares/verifyUser";
 import {
 WalletRoute, UserRoute, TransactionRoute
