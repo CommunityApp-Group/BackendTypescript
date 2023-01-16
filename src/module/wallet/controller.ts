@@ -5,6 +5,8 @@ import handleResponse from '../../middlewares/response';
 import logger from '../../utils/logger';
 import { MESSAGES } from '../../constants';
 import { WalletModel } from '../../database/models/walletz';
+import moment from 'moment';
+import { TRANSFERSTATUS } from '../../Entity/Transaction.Entity';
 
 class WalletController {
 
@@ -131,6 +133,96 @@ class WalletController {
                 200
             );
         } catch (error: any) {
+            logger(module).info(
+                `${500} - ${req.method} - ${req.socket.remoteAddress}- ${
+                  req.originalUrl
+                } - ${error.message}`
+              );
+              console.log(error);
+              return handleResponse(
+                req,
+                res,
+                {
+                  status: "error",
+                  message: MESSAGES.STATUS500,
+                },
+                500
+              );
+        }
+    }
+
+    static async fetchExpenseGraph(req:IGetUserAuthInfoRequest, res: Response){
+        try {
+            const user = req.user;
+            // if (!user) {
+            //     return handleResponse(
+            //       req,
+            //       res,
+            //       {
+            //         status: "error",
+            //         message:
+            //           "User's details cannot be fetched. Please contact customer care for resolution",
+            //       },
+            //       400
+            //     );
+            //   }
+              const startOfMonth = moment().startOf("month").format("YYYY-MM-DD");
+              const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
+              const queryPayload = {
+                // Sender: user.id,
+                CreatedAt: { $gte: `${startOfMonth} 00:00`, $lte: `${endOfMonth} 23:59` },
+                Status: TRANSFERSTATUS.SUCCESS,
+              };     
+              const transactions = await WalletService.fetchTransactions(
+                queryPayload
+              );
+              if (transactions.length == 0) {
+                return handleResponse(
+                  req,
+                  res,
+                  {
+                    status: "error",
+                    message: "No data available",
+                  },
+                  400
+                );
+              }   
+
+              let totalSpent = 0.0;
+                const categorySet = new Set();
+                for (let i = 0; i < transactions.length; i++) {
+                    totalSpent += parseFloat(transactions[i].Amount);
+                    categorySet.add(transactions[i].Type);
+                }
+                const categories = [...categorySet];
+                const finalArr: any = [];
+                categories.forEach((category) => {
+                    const categoryValues : any = { name: category };
+                    let categoryCount = 0;
+                    for (let j = 0; j < transactions.length; j++) {
+                    if (transactions[j].Type === category) {
+                        categoryCount += 1;
+                    }
+                    }
+                    categoryValues["percentage"] = (
+                    (categoryCount / transactions.length) *
+                    100
+                    ).toFixed(2);
+                    finalArr.push(categoryValues);
+                });
+               const  data= { graph: finalArr, totalSpent };
+                return res.json(data)
+                return handleResponse(
+                    req,
+                    res,
+                    {
+                      status: "success",
+                      message: "Expense graph fetched successfully",
+                      data: { graph: finalArr, totalSpent },
+                    },
+                    200
+                  );
+        } catch (error:any) {
             logger(module).info(
                 `${500} - ${req.method} - ${req.socket.remoteAddress}- ${
                   req.originalUrl

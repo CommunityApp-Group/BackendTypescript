@@ -14,4 +14,8 @@ WalletValidator.updateBalanceValidation,
 WalletController.updateBalance
 );
 
+router.get("/expenseGraph",
+
+WalletController.fetchExpenseGraph)
+
 export default router;

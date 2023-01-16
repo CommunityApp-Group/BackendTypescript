@@ -1,11 +1,15 @@
 
 import { Wallet } from '../../Entity/wallet.entity';
+import { Transaction } from '../../Entity/Transaction.Entity';
 import { User } from "../../Entity/user.entity";
 import {DataSource } from 'typeorm';
 import { AppDataSource } from '../../../app-data-source';
 import { UUIDV4 } from 'sequelize';
 
 const WalletModel = AppDataSource.getRepository(Wallet);
+
+const TransactionModel = AppDataSource.getRepository(Transaction);
+
 interface WalletQuery{
     Balance?: number
     userId: string
@@ -35,6 +39,10 @@ class WalletService {
         const Balance = WalletModel.create(balance)
         return Balance;
     }
+    static async fetchTransactions(query: Object) {
+        const transaction = await TransactionModel.find(query);
+        return transaction;
+      }
 }
 
 export default WalletService;

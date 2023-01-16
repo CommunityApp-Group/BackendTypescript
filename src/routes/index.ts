@@ -7,7 +7,7 @@ WalletRoute, UserRoute, TransactionRoute, UtilitiesRoute
 
 const app = express();
 
-app.use("/wallet", verifyUser, WalletRoute);
+app.use("/wallet", WalletRoute);
 app.use("/transaction", TransactionRoute);
 app.use("/user", UserRoute);
 app.use("/utilities", UtilitiesRoute);

@@ -4,7 +4,7 @@ import { AppDataSource } from "../../../app-data-source";
 const TransactionModel = AppDataSource.getRepository(Transaction);
 
 interface TransactionQuery{
-    Amount: number
+    Amount: string
     Purpose: string
     Type: string
 }

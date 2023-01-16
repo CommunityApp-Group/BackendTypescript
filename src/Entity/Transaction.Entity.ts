@@ -21,7 +21,7 @@ export class Transaction extends BaseEntity{
     id: string;
 
     @Column()
-    Amount: number;
+    Amount: string;
 
     @Column()
     Purpose: string
