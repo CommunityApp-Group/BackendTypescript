@@ -17,8 +17,17 @@ interface messageQuery {
 }
 
 class MessageService {
-    static async storeMessage(){
+    static async storeMessage(payload: messageQuery){
+        const message = await AppDataSource.createQueryBuilder()
+        .insert()
+        .into(Message)
+        .values([
+           {message: payload.message, receiver: payload.receiver, sender: payload.sender, type: payload.type} ,
+        ])
+        .execute()
 
+        return message;
     }
 }
 
+export default MessageService;
