@@ -28,6 +28,14 @@ class MessageService {
 
         return message;
     }
+
+    static async findUsersChats(query: Object){
+        const messages = await MessageModel.createQueryBuilder()
+        .where({query})
+        .getManyAndCount()
+
+        return messages;
+    }
 }
 
 export default MessageService;

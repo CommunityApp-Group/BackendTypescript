@@ -3,8 +3,11 @@ import "reflect-metadata";
 import logger from "./src/utils/logger";
 import dotenv from "dotenv";
 import connectDB from "./src/database";
+import { Server } from "socket.io";
+import { ExpressPeerServer } from "peer";
 import { AppDataSource } from "./app-data-source";
 import appRoutes from "./src/routes";
+import http from "http";
 
 dotenv.config();
 
@@ -16,7 +19,17 @@ AppDataSource
     .catch((err) => {
         console.error("Error during Data Source initialization:", err)
     })
+
 const app: Express = express()
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+const peerServer = ExpressPeerServer(server, {
+  path: "/myapp",
+});
 
 
 app.use(express.json());
@@ -35,6 +48,25 @@ async function onListening() {
   });
 
 // app.listen(PORT, onListening)
+
+const onConnection = (socket: any) => {
+  // socket.on("disconnect", function () {
+  //   console.log("user disconnected", socket.id  );
+  // });
+  // console.log("socket connected", socket.id)
+  // messageHandler(io, socket);
+  // callHandler(io, socket);
+  // contactHandler(io, socket);
+  // statusHandler(io, socket);
+};
+
+io.on("connection", onConnection);
+peerServer.on("connection", (client: any) => {
+  console.log(client.token, "connection");
+});
+peerServer.on("disconnect", (client: any) => {
+  console.log(client, "disconnect");
+});
 
 app.listen(PORT, () => {
   // connectDB(),
