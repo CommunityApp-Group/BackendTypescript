@@ -36,6 +36,26 @@ class MessageService {
 
         return messages;
     }
+
+    static async findMessageById(messageId: any){
+        const message = await MessageModel.findOneBy({id: messageId});
+        return message
+    }
+
+    static async getChatList (userID: any){
+        const chat = await MessageModel.createQueryBuilder()
+        .where("sender = :id OR receiver = :id ", { id:userID })
+        .getMany();
+
+        return chat;
+    }
+
+    static async updateMessageStatus(messageModel: any, status: string) {
+        messageModel.status = status;
+        await messageModel.save();
+        return messageModel;
+
+    }
 }
 
 export default MessageService;

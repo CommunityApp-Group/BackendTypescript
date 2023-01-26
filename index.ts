@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import connectDB from "./src/database";
 import { Server } from "socket.io";
 import { ExpressPeerServer } from "peer";
+import messageHandler from "./src/module/socket/messageHandler";
 import { AppDataSource } from "./app-data-source";
 import appRoutes from "./src/routes";
 import http from "http";
@@ -50,14 +51,11 @@ async function onListening() {
 // app.listen(PORT, onListening)
 
 const onConnection = (socket: any) => {
-  // socket.on("disconnect", function () {
-  //   console.log("user disconnected", socket.id  );
-  // });
-  // console.log("socket connected", socket.id)
-  // messageHandler(io, socket);
-  // callHandler(io, socket);
-  // contactHandler(io, socket);
-  // statusHandler(io, socket);
+  socket.on("disconnect", function () {
+    console.log("user disconnected", socket.id  );
+  });
+  console.log("socket connected", socket.id)
+  messageHandler(io, socket);
 };
 
 io.on("connection", onConnection);
@@ -73,3 +71,5 @@ app.listen(PORT, () => {
   logger(module).error(`⚡️[server]: Server is running at port ${PORT}`);
     console.log(`server is running on ${PORT}`)
 })
+
+export { io };
