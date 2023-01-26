@@ -18,7 +18,7 @@ const messageHandler = (io: any, socket: any) => {
         logger(module).info(
           `storeMessage: ${JSON.stringify({ senderId, receiverId })}`
         );
-        const query: any = { sender: senderId, message,  type };
+        const query: Object | any = { sender: senderId, message,  type };
         const findSender = await UserService.findUserById({ _id: senderId });
 
         if (!findSender) {
