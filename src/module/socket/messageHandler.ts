@@ -33,7 +33,8 @@ const messageHandler = (io: any, socket: any) => {
         }
         query.receiver = receiverId;
         const storeMessage = await MessageService.storeMessage(query);
-        const storedMessage = await MessageService.findMessageById(storeMessage.id);
+        const msgId= await MessageService.getId(storeMessage);
+        const storedMessage = await MessageService.findMessageById(msgId);
         socket.emit(senderId, storedMessage);
         if (query.receiver) io.emit(receiverId, storedMessage);
         // if (query.group) io.emit(groupId, storedMessage);

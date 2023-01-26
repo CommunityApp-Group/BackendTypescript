@@ -56,6 +56,11 @@ class MessageService {
         return messageModel;
 
     }
+
+    static async getId(ID: any){
+        const Id = await MessageModel.getId(ID);
+        return Id;
+    }
 }
 
 export default MessageService;
