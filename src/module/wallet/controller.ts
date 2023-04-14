@@ -77,7 +77,19 @@ class WalletController {
         try {
             const user = req.user;
             const { amount} = req.body;
-            const {walletId } = req.params;
+            const {walletId, flag } = req.params;
+            if(amount < 10){
+              return handleResponse(
+                req,
+                res,
+                {
+                    status: "error",
+                    message:
+                    "Insufficient amount, kindly top up your account to complete this transaction",
+                },
+                400
+                );
+            }
             if (!user) {
                 return handleResponse(
                 req,
@@ -116,9 +128,29 @@ class WalletController {
                     400
                 );
             }
-            
+
+            if(flag ==="desc"){
+              if(wallet.Balance < amount){
+                return handleResponse(
+                  req,
+                  res,
+                  {
+                      status: "error",
+                      message:
+                      "Insufficient amount, kindly top up your account to complete this transaction",
+                  },
+                  400
+                  );
+              } else {
+                wallet.Balance -= Number(amount)
+                await wallet.save()
+              }
+            } else{
+
             wallet.Balance += amount;
             await wallet.save();
+            }
+            
 
             return res.json(wallet);
 
